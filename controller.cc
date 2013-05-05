@@ -99,9 +99,37 @@ void controller::load_data1(char *datafile){
 
   ifstream infile(datafile);
   istringstream ins;
+  istringstream ins_counter;
   string line;
-      
+  int line_count=0;
+
   while(getline(infile,line)){
+    
+    
+    line_count++;
+    
+    ins_counter.clear();
+    ins_counter.str(line);
+    int word_count = 0;
+    string word;
+
+    while(ins_counter >> word) { word_count++;}
+
+
+    if(format==1 && word_count!= 6){
+      fprintf(stderr,"Error: unexpected input data format in file %s at line %d (6 entries expected, %d entries observed)\n",datafile, line_count, word_count);
+      exit(1);
+    }
+    
+
+    if(format==3 && word_count!= 4){
+      fprintf(stderr,"Error: unexpected input data format in file %s at line %d (4 entries expected, %d entries observed)\n",datafile, line_count, word_count);
+      exit(1);
+    }
+
+
+
+
     
     ins.clear();
     ins.str(line);
@@ -162,9 +190,25 @@ void controller::load_data2(char *datafile){
   ifstream infile(datafile);
   istringstream ins;
   string line;
-  
+
+  int line_count=0;
+  istringstream ins_counter;
     
   while(getline(infile,line)){
+
+
+    line_count++;
+    
+    ins_counter.clear();
+    ins_counter.str(line);
+    int word_count = 0;
+    string word;
+    while(ins_counter >> word) { word_count++;}
+    if(word_count!= 8){
+      fprintf(stderr,"Error: unexpected input data format in file %s at line %d (8 entries expected, %d entries observed)\n",datafile, line_count, word_count);
+      exit(1);
+    }
+    
     
     ins.clear();
     ins.str(line);
