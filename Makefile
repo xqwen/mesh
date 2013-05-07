@@ -1,5 +1,5 @@
-main: main.o qtSSNP.o qtMSNP.o eQTL.o controller.o qtMSNP_ES.o qtMSNP_EE.o qtMSNP_CEFES.o qtMSNP_CEFEE.o paramset.o
-	g++ -O3 main.o qtSSNP.o qtMSNP.o qtMSNP_ES.o qtMSNP_EE.o qtMSNP_CEFES.o qtMSNP_CEFEE.o controller.o paramset.o -lm -L /usr/local/lib -lgsl -lgslcblas -o bamhet
+main: main.o qtSSNP.o qtMSNP.o controller.o qtMSNP_ES.o qtMSNP_EE.o qtMSNP_CEFES.o qtMSNP_CEFEE.o paramset.o
+	g++ -O3 main.o qtSSNP.o qtMSNP.o qtMSNP_ES.o qtMSNP_EE.o qtMSNP_CEFES.o qtMSNP_CEFEE.o controller.o paramset.o -lm -L /usr/local/lib -lgsl -lgslcblas -o mesh
 main.o: main.cc 
 	g++ -c -O3 main.cc	
 paraset.o: paramset.cc paramset.h
@@ -19,4 +19,4 @@ qtMSNP_CEFES.o: qtMSNP_CEFES.h qtMSNP_CEFES.cc
 qtMSNP_CEFEE.o: qtMSNP_CEFEE.h qtMSNP_CEFEE.cc
 	g++ -c -O3 qtMSNP_CEFEE.cc
 clean:
-	rm *.o bamhet
+	rm *.o mesh
