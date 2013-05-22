@@ -14,6 +14,11 @@ WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 
+Download
+=============================================
+The complete package can be downloaded from a single tar file in the download directory.
+
+
 
 Compilation and Installation
 =============================================
