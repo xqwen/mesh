@@ -99,10 +99,12 @@ int main(int argc, char **argv){
 
     if(strcmp(argv[i], "-use_config")==0){
       use_config = 1;
+      continue;
     }
 
     if(strcmp(argv[i], "-print_config_grid")==0){
       output_subgroup = 1;
+      continue;
     }
 
     
