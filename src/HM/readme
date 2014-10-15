@@ -1,0 +1,20 @@
+Usage of the program:
+
+./hm_em -d input_file -s model_num -g grid_num -t stop_threshold 
+
+* input_file is the name of a input file contains log10 BFs. Each line of the input file has the following format:
+
+  snpname_genename model_index  log10_bf_grid1 log10_bf_grid2 ... 
+
+* model_num is the number of models considered
+
+* grid_num is the number of grids considered
+
+* stop_threshold is the threshold increase to terminate EM algorithm. e.g. if the log10_likelihood increase less than the stop_thresold, the EM exists. The default value for this is 0.05
+
+
+Output: 
+
+stderr output: intermediate output from EM runs including current parameter values and log10_likelihood of the model. At the end of the run, it also outputs the profile likelihood 95% confidence interval and the point estimates of pi0, model probabilities and grid probabilities.
+
+stdout output: for each gene-snp pair, the program outputs in each line the gene-level log10BF, posterior probability, snp-level log10BF and log10BF for each configuration.
