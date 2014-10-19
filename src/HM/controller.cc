@@ -42,7 +42,7 @@ void eQTL_controller::load_data(char *filename, int csize, int gsize){
 
   ifstream infile(filename);
   string line;
-  char delim[] = " ";
+  char delim[] = "\t";
   char *snp_id;
   
   vector<vector<double> > sbf_vec;
