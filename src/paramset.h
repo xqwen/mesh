@@ -56,6 +56,12 @@ class ParamSet {
   // binary
   // 0: default
 
+
+  int est_het;
+  // estimate heterogeneity
+  // binary
+  // 0: default
+
   
   
   // constructor init everything

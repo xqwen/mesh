@@ -13,7 +13,14 @@
 
 
 void controller::init(ParamSet &ps){
-  load_grid(ps.gridfile);
+
+  est_het = ps.est_het;
+  if(ps.est_het){
+    load_het_grid(ps.gridfile);
+  }else{
+    load_grid(ps.gridfile);
+  }
+  
   msnp_option = ps.model;
   abf_option = ps.use_abf;
   adjust_abf = ps.adjust_abf;
@@ -21,6 +28,7 @@ void controller::init(ParamSet &ps){
   use_config = ps.use_config;
   config_hm_output = ps.config_hm_output;
   format = ps.format;
+
   if(format == 3){
     abf_option = 1;
     adjust_abf = 0;// enforce
@@ -52,11 +60,15 @@ void controller::init(ParamSet &ps){
   
 void controller::run(){
   
-  if(use_config)
+  if(use_config){
     compute_config_BF();
-  else
-    compute_meta_BF();
-
+  }else{
+    if(est_het){
+      compute_het_BF();
+    }else{
+      compute_meta_BF();
+    }
+  }
 }
 
 void controller::load_grid(char *gridfile){
@@ -83,6 +95,62 @@ void controller::load_grid(char *gridfile){
   grid_size = omg2_vec.size();
 
 }
+
+
+
+
+
+void controller::load_het_grid(char *hgridfile){
+
+  ifstream gfile(hgridfile);
+  string line;
+  istringstream ins;
+  while(getline(gfile,line)){
+
+    ins.clear();
+    ins.str(line);
+    string header;
+    double val;
+    ins>>header;
+    if(header.compare("corr")==0){
+      while(ins>>val){
+	het_vec.push_back(val);
+      }
+    }
+
+    if(header.compare("size")==0){
+      while(ins>>val){
+	size_vec.push_back(val);
+      }
+    }
+    
+  }
+
+  gfile.close();
+  
+  std::sort(het_vec.begin(),het_vec.end());
+
+  het_size = het_vec.size();
+  for(int i=0;i<het_size;i++){
+    vector<double> p2_vec;
+    vector<double> o2_vec;
+    double r = het_vec[i];
+    for(int j=0;j<size_vec.size();j++){
+      double s2 = size_vec[j]*size_vec[j];
+      double omg2 = r*s2;
+      double phi2 = s2 - omg2;
+      p2_vec.push_back(phi2);
+      o2_vec.push_back(omg2);
+    }
+    het_phi2_vec.push_back(p2_vec);
+    het_omg2_vec.push_back(o2_vec);
+  }
+
+
+}
+
+
+
 
 
 void controller::load_data1(char *datafile){
@@ -300,7 +368,7 @@ void controller::compute_config_BF(){
 
 
 void controller::compute_meta_BF(){
-  
+   
   for(int i=0;i<dataVec.size();i++){
     double rst = 0;
 
@@ -318,3 +386,60 @@ void controller::compute_meta_BF(){
   }
 
 }
+
+
+
+
+void controller::compute_het_BF(){
+ 
+  for(int i=0;i<dataVec.size();i++){
+    double rst = 0;
+    vector<double> hrst_vec;
+    for(int j=0;j<het_size;j++){      
+      double hrst = 0;
+      hrst = dataVec[i]->compute_log10_BF(het_phi2_vec[j],het_omg2_vec[j],abf_option);
+      hrst_vec.push_back(hrst);
+    }
+    fprintf(fout,"%20s\t%9.4f\t%9.4f\t%7.3f\n",(dataVec[i]->get_name()).c_str(), hrst_vec[0],hrst_vec[het_size-1], compute_het_weight(hrst_vec));
+   
+  }
+  
+
+}
+
+
+
+
+double controller::compute_het_weight(vector<double> &vec){
+  
+  double max = -99999;
+  for(int i=0;i<vec.size();i++){
+    if(vec[i]>=max){
+      max = vec[i];
+    }
+  }
+
+  vector<double> vec2;
+  double sum = 0;
+  for(int i=0;i<vec.size();i++){
+    double val = pow(10,vec[i]-max);
+    vec2.push_back(val);
+    sum += val;
+  }
+
+  double rst = 0;
+  for(int i=0;i<het_vec.size();i++){
+    rst += het_vec[i]*vec2[i]/sum;
+  }
+  /*
+  for(int i=0;i<vec.size();i++){
+    printf(" %4.1f ",vec[i]);
+  }
+  */
+  return rst;
+  
+
+
+
+}  
+  

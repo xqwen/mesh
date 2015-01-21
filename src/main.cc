@@ -33,6 +33,7 @@ int main(int argc, char **argv){
   int output_subgroup = -1;
   int adjust_abf = -1;
   int verbose = 0;
+  int est_het = 0;
 
   char gridfile[128];
   char datafile[128];
@@ -95,6 +96,11 @@ int main(int argc, char **argv){
       continue;
     }
 
+
+    if(strcmp(argv[i], "-est_het")==0){
+      est_het = 1;
+      continue;
+    }
 
 
     if(strcmp(argv[i], "-use_config")==0){
@@ -173,6 +179,8 @@ int main(int argc, char **argv){
     ps.output_subgroup = output_subgroup;
   if(adjust_abf != -1)
     ps.adjust_abf = adjust_abf;
+  
+  ps.est_het = est_het;
   
 
   if(strlen(gridfile)!=0)

@@ -1,5 +1,5 @@
 main: main.o qtSSNP.o qtMSNP.o controller.o qtMSNP_ES.o qtMSNP_EE.o qtMSNP_CEFES.o qtMSNP_CEFEE.o paramset.o
-	g++ -O3 main.o qtSSNP.o qtMSNP.o qtMSNP_ES.o qtMSNP_EE.o qtMSNP_CEFES.o qtMSNP_CEFEE.o controller.o paramset.o -lm -L /usr/local/lib -lgsl -lgslcblas -o mesh
+	g++ -O3 main.o qtSSNP.o qtMSNP.o qtMSNP_ES.o qtMSNP_EE.o qtMSNP_CEFES.o qtMSNP_CEFEE.o controller.o paramset.o -lm -L /usr/local/lib -lgsl -lgslcblas -o mesh -static
 main.o: main.cc 
 	g++ -c -O3 main.cc	
 paraset.o: paramset.cc paramset.h
